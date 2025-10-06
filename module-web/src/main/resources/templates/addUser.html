@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Add User</title>  
+</head>
+<body>
+<!-- Insert into layout -->
+    <div th:fragment="content">     
+     <h3 th:text="${user != null} ? 'Edit User' : 'Add User'"></h3>
+
+    <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+    <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+
+   <form th:action="${user != null} ? @{'/users/update/' + ${user.id}} : @{/users/add}" 
+          th:object="${user}" method="post">
+        <div class="mb-3">
+            <label class="form-label">Username</label>
+            <input type="text" class="form-control" name="username"
+                   placeholder="Enter username"
+                   th:field="*{username}" required>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Password</label>
+            <input type="password" class="form-control" name="password"
+                   placeholder="Enter password"
+                   th:field="*{password}" required>
+        </div>
+        
+		<div class="mb-3">
+            <label class="form-label">Full Name</label>
+            <input type="email" class="form-control" name="fullName"
+                   placeholder="Enter full-Name"
+                   th:field="*{fullName}"
+                    required>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Email</label>
+            <input type="email" class="form-control" name="email"
+                   placeholder="Enter email"
+                   th:field="*{email}" >
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Role</label>
+            <select th:field="*{role}" class="form-select" name="role" required>
+                <option value="" disabled>Select role</option>
+                <option th:each="r : ${roles}" th:value="${r}" th:text="${r}">
+                </option>
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-primary"
+                th:text="${user != null} ? 'Update User' : 'Add User'"></button>
+    </form>
+
+
+   </div>
+   <script th:src="@{/js/myjavascript.js}"></script>
+</body>
+</html>
+   

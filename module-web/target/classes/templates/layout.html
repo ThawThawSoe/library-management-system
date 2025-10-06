@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Library Management</title>
+  <link rel="icon" type="image/png" th:href="@{/images/homelogo.png}">
+  <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">   
+  <link th:href="@{/css/mystyle.css}" rel="stylesheet">   
+
+    <style>
+   body { min-height: 100vh; }
+        .sidebar { 
+        width: 220px; background-color: #ffffff; color: #212529; 
+        height: 100vh; position: fixed; top: 56px; left: 0; padding-top: 1rem; }
+        .sidebar a { color: #212529;  text-decoration: none; display: block; padding: 0.5rem 1rem; }
+        .sidebar a:hover { color: #212529;background-color: #e9ecef; }
+        .content { margin-left: 220px;background-color: #f0efef; 
+        color: #212529; margin-top: 56px; padding: 1rem; }
+        .topbar {
+         height: 56px; background-color:#ffffff; color: #212529; 
+        position: fixed; top: 0; left: 0; right: 0; display: flex; 
+        align-items: center; padding: 0 1rem; z-index: 1030; }
+        .btn-primary {
+    background-color: #0d6efd; /* blue accent */
+    border-color: #0d6efd;
+    color: #ffffff;
+}
+.topbar img {
+    background-color: transparent; /* ensures no box */
+     margin: 0;
+    padding: 0;
+    
+}
+  
+  </style>
+</head>
+<body>
+
+<div class="topbar">
+    <img th:src="@{/images/homelogo.png}" alt="Logo" width="40" class="me-2">
+    <span class="fs-5 fw-bold">My Library</span>
+    
+</div>
+<div class="sidebar">
+    <ul class="nav flex-column">
+      <li class="nav-item">
+      	<a class="nav-link " th:href="@{/dashboard}"
+      	th:classappend="${page}=='dashboard' ? ' active' : ''">
+      		<img th:src="@{/images/dashboard.png}"
+      			 alt="Dashboard" class="iconimg">Dashboard
+      	</a>
+      </li>
+      <li class="nav-item">
+      		<a class="nav-link " th:href="@{/books}" 
+      		th:classappend="${page}=='books' ? ' active' : ''">
+      			<img th:src="@{/images/book.png}" alt="Books" class="iconimg">
+      				Books
+      		</a>
+      </li>
+      <li class="nav-item">
+      	<a class="nav-link" th:if="${currentUser != null and (currentUser.role.name()=='ADMIN' or currentUser.role.name()== 'LIBRARIAN')}" th:href="@{/users}"
+      		th:classappend="${page}=='users' ? ' active' : ''">
+      		<img th:src="@{/images/add_user.png}" alt="Books" class="iconimg">
+      		Users
+      	</a>
+      </li>
+      			
+      <li class="nav-item">
+      	<a class="nav-link " th:if="${currentUser != null and (currentUser.role.name()=='ADMIN' or currentUser.role.name()== 'LIBRARIAN')}" th:href="@{/borrowRecord}">
+      		<img th:src="@{/images/borrow_book.png}" alt="Books" class="iconimg">
+      			Borrow Records
+      	</a>
+      </li>
+      
+      <li class="nav-item">
+      	<a class="nav-link " th:if="${currentUser != null and (currentUser.role.name()=='ADMIN' or currentUser.role.name()== 'LIBRARIAN')}" th:href="@{/borrow}">
+      		<img th:src="@{/images/report.png}" alt="Books" class="iconimg">
+      		Reports
+      	</a>
+      </li>
+    
+    <hr>
+<!--    <img src="/images/logout.png" alt="Books" width="20" height="20" style="margin-right:8px;"> -->
+<!--       		 <a class="btn btn-outline-light" th:href="@{/logout}">Logout</a> -->
+      		 
+       		 <li class="nav-item"> 
+    <a class="nav-link" th:href="@{/logout}">
+    <img th:src="@{/images/exit.png}" alt="Logout" class="iconimg">
+    logout
+    </a>
+    </li>
+    </ul>
+  </div>
+
+  <div class="content">  
+        <!-- This is where child pages will be inserted -->
+       <div th:replace="~{${page} :: content}"></div>
+       
+    </div>
+
+<script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+</body>
+</html>

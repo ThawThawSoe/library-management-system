@@ -1,0 +1,31 @@
+@charset "UTF-8";
+.iconimg{
+	width:20px;
+	height:20px;
+	margin-right:8px;
+}
+
+
+
+.nav-link.active {
+    font-weight: bold;
+    background-color: #989ea4;
+}
+
+.btn-primary {
+    background-color: #2BC4AE !important; /* new background color */
+    border-color: #2BC4AE !important;     /* new border color */
+    color: white !important;
+}
+
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:focus-visible,
+.btn-primary:active,
+.btn-primary.active,
+.show > .btn-primary.dropdown-toggle {
+    background-color: #3CAE9E !important;
+    border-color: #3CAE9E !important;
+    color: white !important;
+    box-shadow: none !important;
+}
