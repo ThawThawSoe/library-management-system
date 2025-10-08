@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuite tests="1" failures="0" name="com.example.library.book.AppTest" time="0.005" errors="0" skipped="0">
+<testsuite tests="1" failures="0" name="com.example.library.book.AppTest" time="0.013" errors="0" skipped="0">
   <properties>
     <property name="java.runtime.name" value="Java(TM) SE Runtime Environment"/>
     <property name="java.vm.version" value="18.0.1.1+2-6"/>
     <property name="sun.boot.library.path" value="C:\Program Files\Java\jdk-18.0.1.1\bin"/>
-    <property name="maven.multiModuleProjectDirectory" value="D:/Sourcetree/library-parent"/>
+    <property name="maven.multiModuleProjectDirectory" value="D:/Sourcetree/library-parent/module-book"/>
     <property name="java.vm.vendor" value="Oracle Corporation"/>
     <property name="java.vendor.url" value="https://java.oracle.com/"/>
     <property name="guice.disable.misplaced.annotation.check" value="true"/>
@@ -15,7 +15,7 @@
     <property name="user.country" value="US"/>
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
     <property name="java.vm.specification.name" value="Java Virtual Machine Specification"/>
-    <property name="user.dir" value="D:\Sourcetree\library-parent"/>
+    <property name="user.dir" value="D:\Sourcetree\library-parent\module-book"/>
     <property name="java.vm.compressedOopsMode" value="32-bit"/>
     <property name="java.runtime.version" value="18.0.1.1+2-6"/>
     <property name="os.arch" value="amd64"/>
@@ -61,5 +61,5 @@
     <property name="sun.stdout.encoding" value="cp437"/>
     <property name="sun.cpu.isalist" value="amd64"/>
   </properties>
-  <testcase classname="com.example.library.book.AppTest" name="testApp" time="0.005"/>
+  <testcase classname="com.example.library.book.AppTest" name="testApp" time="0.013"/>
 </testsuite>

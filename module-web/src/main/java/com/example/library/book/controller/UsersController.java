@@ -9,8 +9,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,6 +25,7 @@ import com.example.library.book.repository.UserRepository;
 import com.example.library.book.service.UserService;
 
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 
 @Controller
 public class UsersController {
@@ -30,7 +33,7 @@ public class UsersController {
     private UserRepository userRepository;
 	
 	@Autowired
-	private UserService userService;
+    private UserService userService;
 	
 	@GetMapping("/users")
 	public String users(HttpSession session,
@@ -58,16 +61,42 @@ public class UsersController {
 	}
 	
 	
-	@PostMapping("/update/{id}")
-	public String updateUser(@PathVariable Long id, @ModelAttribute User user, RedirectAttributes redirectAttributes) {
-	    try {
-	    	userService.updateUser(id,user);
-	        redirectAttributes.addFlashAttribute("success", "User updated successfully!");
-	    } catch (Exception e) {
-	        redirectAttributes.addFlashAttribute("error", "Failed to update user!");
-	    }
-	    return "redirect:/users";
-	}
+	@GetMapping("/updateUser/{id}")
+    public String deleteUser(@PathVariable Long id,HttpSession session,Model model) {
+		
+		User currentUser = (User) session.getAttribute("currentUser");
+		if(currentUser == null) {
+			return "redirect:/login";
+		}
+		
+		Optional<User> user =  userRepository.findById(id);
+		//List<String> roles = Arrays.asList("ADMIN", "LIBRARIAN", "STUDENT");
+		model.addAttribute("user", user);
+		model.addAttribute("isEdit", true);
+		model.addAttribute("currentUser", currentUser);
+		model.addAttribute("roles", Arrays.asList("ADMIN", "LIBRARIAN", "STUDENT"));
+		model.addAttribute("page", "addUser");
+        return "layout"; // layout.html is rendered with fragment inside
+		
+        
+    }
+	
+	@GetMapping("/addUser")
+    public String showAddForm(HttpSession session,Model model) {        
+        
+        User currentUser = (User) session.getAttribute("currentUser");
+		if(currentUser == null) {
+			return "redirect:/login";
+		}		
+		
+		
+		model.addAttribute("user", new User());
+		model.addAttribute("isEdit", false);
+		model.addAttribute("currentUser", currentUser);
+		model.addAttribute("roles", Arrays.asList("ADMIN", "LIBRARIAN", "STUDENT"));
+		model.addAttribute("page", "addUser");
+        return "layout"; // layout.html is rendered with fragment inside
+    }
 
 	@GetMapping("/delete/{id}")
     public String deleteUser(@PathVariable Long id,Model model, RedirectAttributes redirectAttributes) {
@@ -77,6 +106,17 @@ public class UsersController {
 		 }  catch (Exception e) {
 	            redirectAttributes.addFlashAttribute("error", "Failed to delete user!");
 	        }
+        return "redirect:/users";
+    }
+	
+	@PostMapping("/save")
+    public String saveUser(@ModelAttribute User user,BindingResult result, RedirectAttributes redirectAttributes) {
+		
+		
+                  
+
+		userService.saveUser(user);
+        redirectAttributes.addFlashAttribute("success", "User saved successfully!");
         return "redirect:/users";
     }
 }

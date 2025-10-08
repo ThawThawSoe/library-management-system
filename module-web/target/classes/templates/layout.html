@@ -59,7 +59,7 @@
       </li>
       <li class="nav-item">
       	<a class="nav-link" th:if="${currentUser != null and (currentUser.role.name()=='ADMIN' or currentUser.role.name()== 'LIBRARIAN')}" th:href="@{/users}"
-      		th:classappend="${page}=='users' ? ' active' : ''">
+      		th:classappend="${page=='users' or page == 'addUser' or page == 'updateUser'} ? ' active' : ''">
       		<img th:src="@{/images/add_user.png}" alt="Books" class="iconimg">
       		Users
       	</a>
@@ -99,5 +99,7 @@
     </div>
 
 <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/js/myjavascript.js}"></script>
+
 </body>
 </html>

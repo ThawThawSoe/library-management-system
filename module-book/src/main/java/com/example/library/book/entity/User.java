@@ -1,6 +1,9 @@
 package com.example.library.book.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.NotBlank;
+
 import java.time.LocalDateTime;
 
 @Entity
@@ -12,13 +15,17 @@ public class User {
 	
 	@Column(unique = true)
 	private String registerId;
-
+	
+	
     @Column(nullable = false, unique = true, length = 50)
     private String username;
-
+	
+	
     @Column(nullable = false)
     private String password;
-
+	
+	
+	
     private String fullName;
     private String email;
 

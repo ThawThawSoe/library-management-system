@@ -29,3 +29,11 @@
     color: white !important;
     box-shadow: none !important;
 }
+.bg-primary {
+  background-color: #3CAE9E !important;
+  color: white !important;
+}
+#card-header-background{
+	 background-color: #3CAE9E !important;
+  color: white !important;
+}

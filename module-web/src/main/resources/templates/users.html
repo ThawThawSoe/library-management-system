@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Patient List</title>  
+    <title>Patient List</title>
+      
 </head>
 <body>
 <!-- Insert into layout -->
@@ -32,11 +33,11 @@
         <tbody id="userTable">
             <tr th:each="user : ${userlist}">
                 <td th:text="${user.registerId}"></td>
-                <td th:text="${user.fullName}"></td>
+                <td th:text="${user.username}"></td>
                 <td th:text="${user.email}"></td>
                 <td th:text="${user.role}"></td>
                 <td>
-                    <a th:href="@{'/users/edit/' + ${user.userId}}" class="btn btn-warning btn-sm">Edit</a>
+                    <a th:href="@{'/updateUser/' + ${user.userId}}" class="btn btn-warning btn-sm">Edit</a>
                     <a th:href="@{'/delete/' + ${user.userId}}" class="btn btn-danger btn-sm"
                        onclick="return confirm('Are you sure you want to delete this user?')">Delete</a>
                 </td>
@@ -50,7 +51,7 @@
   	</div>
 
    </div>
-   <script th:src="@{/js/myjavascript.js}"></script>
+   
 </body>
 </html>
    
