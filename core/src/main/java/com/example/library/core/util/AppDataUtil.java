@@ -162,4 +162,32 @@ public class AppDataUtil {
 			log.error("Unable to read properties from properties file " + ioe);
 		}
 	}
+	
+	//check input string with null or greater than 
+	public static boolean checkInputValue(String inputString,int size) {
+		
+		if(inputString == null || inputString.trim().isEmpty()) {
+			return false;
+			
+		}else if(inputString.length()>size){
+			return false;
+		}
+		return true;
+	}
+	
+	public static boolean checkInputValueLess(String inputString,int size) {
+			
+			if(inputString == null || inputString.trim().isEmpty()) {
+				return false;
+				
+			}else if(inputString.length()<size){
+				return false;
+			}
+			return true;
+		}
+	
+	
+	
+	
+	
 }

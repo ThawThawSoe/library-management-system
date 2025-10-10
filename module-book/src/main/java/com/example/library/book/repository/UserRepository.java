@@ -16,7 +16,7 @@ public interface UserRepository extends JpaRepository<User, Long>{
     long countByCreatedAtToday(@Param("today") LocalDate today);
 
 	//List<User> findByFullNameContainingIgnoreCase(String keyword);
-	//List<User> findByFullNameContainingIgnoreCase(String keyword);
+	List<User> findByFullNameContainingIgnoreCase(String keyword);
 	
 		
 	

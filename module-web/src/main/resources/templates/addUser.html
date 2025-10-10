@@ -12,16 +12,17 @@
 	    <div class="card-header text-white d-flex justify-content-between align-items-center" 
 	    style="background-color: #ABB9B7 !important;
   color: white !important;">
-	      <h4 class="mb-0" th:text="${isEdit} ? 'Edit User' : 'Add New User'"></h4>
+	      <h4 class="mb-0" th:text="${isEdit} ? 'Edit User' : 'Add New User'"></h4>	     
 	      <a th:href="@{/users}"  class="btn btn-light btn-sm">Back to List</a>
-	    </div>  
-     		
+	    </div>     		
 
     <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
     <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
 	<div class="card-body">
 	<div id="message" style="color:red; margin-bottom: 10px;"></div>
 	   <form   th:action="@{/save}" th:object="${user}" method="post" id="form">
+	    	<input type="hidden" name="isEdit" th:value="${isEdit}" />
+	    	<input type="hidden" name="userId" th:field="*{userId}" />
 	        <div class="row mb-3">
 	            <label class="col-sm-3 col-form-label">Username</label>
 	            <div class="col-sm-5">
@@ -30,7 +31,9 @@
 	                   th:field="*{username}"  >
 	            </div>
 	            <div class="col-sm-3 text-danger small username-error"></div>
-	                    	
+	            <div th:if="${usernameError}" style="color:red">
+			        <p th:text="${usernameError}"></p>
+			    </div>	                    	
 	        </div>
 	
 	        <div class="row mb-3">
@@ -41,6 +44,9 @@
 	                   th:field="*{password}">
 	             </div>
 	             <div class="col-sm-3 text-danger password-error"></div>
+	             <div th:if="${passwordError}" style="color:red">
+			        <p th:text="${passwordError}"></p>
+			    </div>
 	        </div>
 	        
 			<div class="row mb-3">
@@ -58,7 +64,8 @@
 	            	<input type="text" class="form-control" name="email"
 	                   placeholder="Enter email"
 	                   th:field="*{email}" >
-	             </div>     
+	             </div>
+	              <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>     
 	        </div>
 	
 	        <div class="row mb-3">

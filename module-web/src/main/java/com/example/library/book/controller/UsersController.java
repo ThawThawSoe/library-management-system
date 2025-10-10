@@ -23,6 +23,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.example.library.book.entity.User;
 import com.example.library.book.repository.UserRepository;
 import com.example.library.book.service.UserService;
+import com.example.library.book.util.DataUtil;
+import com.example.library.core.util.AppDataUtil;
 
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -33,7 +35,8 @@ public class UsersController {
     private UserRepository userRepository;
 	
 	@Autowired
-    private UserService userService;
+    private UserService userService;	
+	
 	
 	@GetMapping("/users")
 	public String users(HttpSession session,
@@ -50,7 +53,8 @@ public class UsersController {
 			userlist = userRepository.findAll();
 		}else {
 			//userlist = userRepository.findByFullNameContainingIgnoreCase(keyword);
-			userlist = userRepository.findByFullNameContainingIgnoreCase(keyword, null);
+			userlist = userRepository.findByFullNameContainingIgnoreCase(keyword);
+			//userRepository.findby
 		}
    	 
 		model.addAttribute("keyword", keyword);
@@ -89,8 +93,11 @@ public class UsersController {
 			return "redirect:/login";
 		}		
 		
+		// If user object not already in model (from flash), create a new one
+        if (!model.containsAttribute("user")) {
+        	model.addAttribute("user", new User());
+        }
 		
-		model.addAttribute("user", new User());
 		model.addAttribute("isEdit", false);
 		model.addAttribute("currentUser", currentUser);
 		model.addAttribute("roles", Arrays.asList("ADMIN", "LIBRARIAN", "STUDENT"));
@@ -110,13 +117,48 @@ public class UsersController {
     }
 	
 	@PostMapping("/save")
-    public String saveUser(@ModelAttribute User user,BindingResult result, RedirectAttributes redirectAttributes) {
+    public String saveUser(@ModelAttribute User user,
+    		@RequestParam(value = "isEdit", required = false) Boolean isEdit,
+    		 RedirectAttributes redirectAttributes) {
+		boolean isValid = true; 
 		
+		System.out.println("isEdit "+ isEdit);
+		if(user != null ) {
+			if (!AppDataUtil.checkInputValue(user.getUsername(), 50)) {
+	            redirectAttributes.addFlashAttribute("usernameError", "Username should be entered!");
+	            isValid = false;
+	        }
+			
+			if(!AppDataUtil.checkInputValueLess(user.getPassword(), 6)) {
+				redirectAttributes.addFlashAttribute("passwordError", "Password should be entered!");
+	            isValid = false;
+			}
+			
+			
+		}
 		
-                  
-
-		userService.saveUser(user);
-        redirectAttributes.addFlashAttribute("success", "User saved successfully!");
+		if(!isValid) {
+			redirectAttributes.addFlashAttribute("user", user);			
+			return "redirect:/addUser";
+			
+		}
+		    
+		if(isEdit) {
+			
+			userService.updateUser(user);
+	        redirectAttributes.addFlashAttribute("success", "User Updated successfully!");
+		}else {
+			if(userRepository.findByUsername(user.getUsername()).isEmpty()) {
+				userService.saveUser(user);
+		        redirectAttributes.addFlashAttribute("success", "User saved successfully!");
+			}else {	
+				redirectAttributes.addFlashAttribute("user", user);
+				redirectAttributes.addFlashAttribute("error", "UserName Already Exit!");
+				return "redirect:/addUser";
+			}
+			
+		}
+		
         return "redirect:/users";
     }
 }

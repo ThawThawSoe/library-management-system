@@ -27,6 +27,8 @@ public class User {
 	
 	
     private String fullName;
+    
+    @NotBlank(message = "Email should not blank")
     private String email;
 
     @Enumerated(EnumType.STRING)

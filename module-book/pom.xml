@@ -8,7 +8,7 @@
     <version>1.0-SNAPSHOT</version>
   </parent>
   
- 
+ <groupId>com.example.library.book</groupId>
   <artifactId>module-book</artifactId>
   <packaging>jar</packaging>
   <name>module-book</name>

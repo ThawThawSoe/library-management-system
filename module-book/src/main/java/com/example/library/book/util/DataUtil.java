@@ -128,4 +128,16 @@ public class DataUtil {
 			log.error("Unable to read properties from properties file " + ioe);
 		}
 	}
+	
+	public static boolean checkString(String inputString,int size) {
+		
+		if(inputString == null || inputString.trim().isEmpty()) {
+			return false;
+			
+		}else if(inputString.length()>size){
+			return false;
+		}
+		return true;
+	}
+	
 }
