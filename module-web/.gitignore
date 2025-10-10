@@ -1,0 +1,63 @@
+.project
+.settings
+.classpath
+core/target
+*css
+lib/
+vendor/
+
+# ===========================
+# Maven build folders
+# ===========================
+# Ignore all target folders in any module
+**/target/
+
+# Ignore compiled class files
+**/*.class
+
+# Ignore JAR, WAR, EAR files
+**/*.jar
+**/*.war
+**/*.ear
+
+# Ignore Maven build metadata
+**/target/maven-status/
+**/target/maven-archiver/
+**/target/surefire-reports/
+
+# Ignore META-INF in target/classes
+**/target/classes/META-INF/
+
+# ===========================
+# Eclipse IDE files
+# ===========================
+*.classpath
+*.project
+.settings/
+
+# IntelliJ IDEA files
+*.iml
+.idea/
+
+# ===========================
+# OS files
+# ===========================
+.DS_Store
+Thumbs.db
+
+# ===========================
+# Optional: vendor libraries (like downloaded Bootstrap)
+# ===========================
+lib/
+vendor/
+
+# ===========================
+# Ignore logs and temp files
+# ===========================
+*.log
+*.tmp
+
+target/surefire-reports/
+target/surefire-reports/
+target/classes/static/
+

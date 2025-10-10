@@ -1,0 +1,10 @@
+.project
+.settings
+.classpath
+core/target
+*css
+lib/
+vendor/
+
+target/surefire-reports/
+target/classes/static/

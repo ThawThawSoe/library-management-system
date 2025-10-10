@@ -1,0 +1,7 @@
+.project
+.settings
+.classpath
+core/target
+*css
+lib/
+vendor/
