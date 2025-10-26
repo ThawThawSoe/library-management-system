@@ -29,18 +29,29 @@ public class Book {
     private long bookId;
 
     @Column(nullable = false)
-    private String title;
-
-    private String author;
-    private String publisher;
+    private String title;    
+    
     private Integer publishedYear;
 
     @Column(unique = true)
     private String isbn;
 
-    private String category;
-    private Integer copiesTotal = 1;
-    private Integer copiesAvailable = 1;
+    
+    private Integer copiesTotal;
+    private Integer copiesAvailable;
+    
+    @ManyToOne
+    @JoinColumn(name = "author_id")
+    private Author author;
+    
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private Category category;
+    
+    @ManyToOne
+    @JoinColumn(name = "publisher_id")
+    private Publisher publisher;
+    
 	public Long getBookId() {
 		return bookId;
 	}
@@ -49,19 +60,8 @@ public class Book {
 	}
 	public void setTitle(String title) {
 		this.title = title;
-	}
-	public String getAuthor() {
-		return author;
-	}
-	public void setAuthor(String author) {
-		this.author = author;
-	}
-	public String getPublisher() {
-		return publisher;
-	}
-	public void setPublisher(String publisher) {
-		this.publisher = publisher;
-	}
+	}	
+	
 	public Integer getPublishedYear() {
 		return publishedYear;
 	}
@@ -74,12 +74,7 @@ public class Book {
 	public void setIsbn(String isbn) {
 		this.isbn = isbn;
 	}
-	public String getCategory() {
-		return category;
-	}
-	public void setCategory(String category) {
-		this.category = category;
-	}
+	
 	public Integer getCopiesTotal() {
 		return copiesTotal;
 	}

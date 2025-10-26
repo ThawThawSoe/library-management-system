@@ -6,9 +6,9 @@
 </head>
 <body>
 <!-- Insert into layout -->
-    <div th:fragment="content">   
-	 <div class="container mt-4">
-	  <div class="card shadow-sm rounded-3">
+    <div th:fragment="content">
+    <div class="container mt-4">
+	    <div class="card shadow-sm rounded-3">	 
 	    <div class="card-header text-white d-flex justify-content-between align-items-center" 
 	    style="background-color: #ABB9B7 !important;
   color: white !important;">
@@ -113,7 +113,8 @@
 	        if (!usernameInput.value || usernameInput.value.trim() === "") {
 	        	nameError.textContent = "Username cannot be empty";
 	            return;
-	        }else if( usernameInput.value.length > 50){
+	        }
+	        else if( usernameInput.value.length > 50){
 	        	nameError.textContent  = "Username cannot be longer than 50 characters";
 	             return;
 			}
@@ -142,7 +143,8 @@
 
 	 </div>
    </div>
-  </div>
+   </div>
+
   
    
  </div> 

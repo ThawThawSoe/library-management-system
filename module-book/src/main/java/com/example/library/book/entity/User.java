@@ -1,8 +1,10 @@
 package com.example.library.book.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 import java.time.LocalDateTime;
 
@@ -28,8 +30,7 @@ public class User {
 	
     private String fullName;
     
-    @NotBlank(message = "Email should not blank")
-    private String email;
+	private String email;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -39,7 +40,7 @@ public class User {
     private LocalDateTime createdAt = LocalDateTime.now();
 
     public enum Role {
-        ADMIN, LIBRARIAN, STUDENT
+        ADMIN, LIBRARIAN, STUDENT,MEMBER
     }
 
 	public Long getUserId() {

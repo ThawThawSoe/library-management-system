@@ -100,7 +100,7 @@ public class UsersController {
 		
 		model.addAttribute("isEdit", false);
 		model.addAttribute("currentUser", currentUser);
-		model.addAttribute("roles", Arrays.asList("ADMIN", "LIBRARIAN", "STUDENT"));
+		model.addAttribute("roles", Arrays.asList("ADMIN", "LIBRARIAN", "STUDENT","MEMBER"));
 		model.addAttribute("page", "addUser");
         return "layout"; // layout.html is rendered with fragment inside
     }
@@ -117,12 +117,12 @@ public class UsersController {
     }
 	
 	@PostMapping("/save")
-    public String saveUser(@ModelAttribute User user,
-    		@RequestParam(value = "isEdit", required = false) Boolean isEdit,
-    		 RedirectAttributes redirectAttributes) {
-		boolean isValid = true; 
-		
-		System.out.println("isEdit "+ isEdit);
+    public String saveUser(
+    		@ModelAttribute User user,
+    		@RequestParam(value = "isEdit", required = false) Boolean isEdit,    		
+    		 RedirectAttributes redirectAttributes
+    		 ) {
+		boolean isValid = true; 	
 		if(user != null ) {
 			if (!AppDataUtil.checkInputValue(user.getUsername(), 50)) {
 	            redirectAttributes.addFlashAttribute("usernameError", "Username should be entered!");
