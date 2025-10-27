@@ -30,14 +30,14 @@ public class BookController {
     public BookController(BookService bookService) {
         this.bookService = bookService;
     }
-
-    @GetMapping("/getAllBooks")
-    public List<Book> getAllBooks() {
-        return bookService.getAllBooks();
-    }
-
-    @PostMapping("/createBook")
-    public Book createBook(@RequestBody Book book) {
-        return bookService.saveBook(book);
-    }
+//
+//    @GetMapping("/getAllBooks")
+//    public List<Book> getAllBooks() {
+//        return bookService.getAllBooks();
+//    }
+//
+//    @PostMapping("/createBook")
+//    public Book createBook(@RequestBody Book book) {
+//        return bookService.saveBook(book);
+//    }
 }

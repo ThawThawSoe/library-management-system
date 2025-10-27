@@ -28,7 +28,9 @@ public class Book {
     @GeneratedValue(strategy = GenerationType.IDENTITY)    
     private long bookId;
 
-    @Column(nullable = false)
+   
+    @Column(columnDefinition = "VARCHAR(100) CHARACTER SET utf8 COLLATE utf8mb4_unicode_ci",
+    nullable = false)
     private String title;    
     
     private Integer publishedYear;
@@ -40,15 +42,15 @@ public class Book {
     private Integer copiesTotal;
     private Integer copiesAvailable;
     
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "author_id")
     private Author author;
     
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "category_id")
     private Category category;
     
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "publisher_id")
     private Publisher publisher;
     
@@ -88,6 +90,27 @@ public class Book {
 		this.copiesAvailable = copiesAvailable;
 	}
 	public void setBookId(Long bookId) {
+		this.bookId = bookId;
+	}
+	public Author getAuthor() {
+		return author;
+	}
+	public void setAuthor(Author author) {
+		this.author = author;
+	}
+	public Category getCategory() {
+		return category;
+	}
+	public void setCategory(Category category) {
+		this.category = category;
+	}
+	public Publisher getPublisher() {
+		return publisher;
+	}
+	public void setPublisher(Publisher publisher) {
+		this.publisher = publisher;
+	}
+	public void setBookId(long bookId) {
 		this.bookId = bookId;
 	}
 	
