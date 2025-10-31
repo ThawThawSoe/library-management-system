@@ -17,7 +17,23 @@
       <artifactId>junit</artifactId>
       <scope>test</scope>
     </dependency>
+     <dependency>
+    <groupId>io.jsonwebtoken</groupId>
+    <artifactId>jjwt-api</artifactId>
+    <version>0.12.5</version>
+</dependency>
+<dependency>
+    <groupId>io.jsonwebtoken</groupId>
+    <artifactId>jjwt-impl</artifactId>
+    <version>0.12.5</version>
+</dependency>
+<dependency>
+    <groupId>io.jsonwebtoken</groupId>
+    <artifactId>jjwt-jackson</artifactId>
+    <version>0.12.5</version>
+</dependency> 
   </dependencies>
+  
   <properties>
     <java.version>18</java.version>
     <maven.compiler.source>18</maven.compiler.source>
@@ -48,7 +64,8 @@
         <version>${spring.boot.version}</version>
         <type>pom</type>
         <scope>import</scope>
-      </dependency>
+      </dependency>          
     </dependencies>
   </dependencyManagement>
+  
 </project>

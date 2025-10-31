@@ -3,6 +3,7 @@ package com.example.library.book.controller;
 import com.example.library.book.entity.Book;
 import com.example.library.book.repository.BookRepository;
 import com.example.library.book.service.BookService;
+import com.example.library.core.util.JwtUtil;
 
 import org.springframework.web.bind.annotation.*;
 
@@ -26,10 +27,15 @@ public class BookController {
 	 */
 
 	private final BookService bookService;
+	private final BookRepository bookRepository;
 
-    public BookController(BookService bookService) {
+    public BookController(BookService bookService, BookRepository bookRepository) {
         this.bookService = bookService;
+		this.bookRepository = bookRepository;
     }
+    
+    
+    
 //
 //    @GetMapping("/getAllBooks")
 //    public List<Book> getAllBooks() {
@@ -40,4 +46,18 @@ public class BookController {
 //    public Book createBook(@RequestBody Book book) {
 //        return bookService.saveBook(book);
 //    }
+    
+    
+    @GetMapping
+    public List<Book> getAllBooks(@RequestHeader("Authorization") String token) {
+        // ✅ Remove "Bearer " from token
+        token = token.replace("Bearer ", "");
+
+        // ✅ Verify token before returning data
+        if (!JwtUtil.validateToken(token)) {
+            throw new RuntimeException("Invalid or expired token");
+        }
+
+        return bookRepository.findByCategoryId((long)5);
+    }
 }
