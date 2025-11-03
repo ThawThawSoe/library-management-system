@@ -2,6 +2,8 @@ package com.example.library.book.entity;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -20,6 +22,7 @@ public class Author {
     private String bio;
 
     @OneToMany(mappedBy = "author")
+    @JsonManagedReference
     private List<Book> books;
 
 	

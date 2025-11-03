@@ -1,5 +1,7 @@
 package com.example.library.book.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.*;
 @Entity
 @Table(name = "books")
@@ -44,14 +46,17 @@ public class Book {
     
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "author_id")
+    @JsonManagedReference
     private Author author;
     
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "category_id")
+    @JsonManagedReference
     private Category category;
     
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "publisher_id")
+    @JsonManagedReference
     private Publisher publisher;
     
 	public Long getBookId() {

@@ -4,12 +4,14 @@ import com.example.library.book.entity.Book;
 import com.example.library.book.repository.BookRepository;
 import com.example.library.book.service.BookService;
 import com.example.library.core.util.JwtUtil;
+import com.example.library.dto.BookDTO;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import jakarta.annotation.PostConstruct;
 import java.util.List;
-
+import java.util.Optional;
 import java.util.List;
 
 
@@ -49,7 +51,7 @@ public class BookController {
     
     
     @GetMapping
-    public List<Book> getAllBooks(@RequestHeader("Authorization") String token) {
+    public ResponseEntity<BookDTO> getAllBooks(@RequestHeader("Authorization") String token) {
         // ✅ Remove "Bearer " from token
         token = token.replace("Bearer ", "");
 
@@ -58,6 +60,11 @@ public class BookController {
             throw new RuntimeException("Invalid or expired token");
         }
 
-        return bookRepository.findByCategoryId((long)5);
+        List<Book> booklist =  bookRepository.findByCategoryId((long)5);
+        if(booklist.isEmpty()) {
+        	return ResponseEntity.notFound().build();
+        }
+        BookDTO bookDto = new BookDTO(booklist.get(0));
+       return ResponseEntity.ok(bookDto);
     }
 }
