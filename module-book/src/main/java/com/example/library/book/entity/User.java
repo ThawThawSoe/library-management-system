@@ -1,12 +1,23 @@
 package com.example.library.book.entity;
 
-import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
+
+
+
+
 
 import java.time.LocalDateTime;
+import java.util.Date;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 @Entity
 @Table(name = "users")
@@ -36,8 +47,8 @@ public class User {
     @Column(nullable = false)
     private Role role;
 
-    @Column(name = "created_at", columnDefinition = "DATETIME")
-    private LocalDateTime createdAt = LocalDateTime.now();
+    @Column(name = "created_at")
+    private LocalDateTime   createdAt = LocalDateTime.now();
 
     public enum Role {
         ADMIN, LIBRARIAN, STUDENT,MEMBER
@@ -90,6 +101,10 @@ public class User {
 	public void setRole(Role role) {
 		this.role = role;
 	}
+
+	
+
+	
 
 	public LocalDateTime getCreatedAt() {
 		return createdAt;

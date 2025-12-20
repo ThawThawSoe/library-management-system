@@ -9,7 +9,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -23,11 +22,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.example.library.book.entity.User;
 import com.example.library.book.repository.UserRepository;
 import com.example.library.book.service.UserService;
-import com.example.library.book.util.DataUtil;
 import com.example.library.core.util.AppDataUtil;
 
-import jakarta.servlet.http.HttpSession;
-import jakarta.validation.Valid;
+import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 @Controller
 public class UsersController {
@@ -148,7 +146,7 @@ public class UsersController {
 			userService.updateUser(user);
 	        redirectAttributes.addFlashAttribute("success", "User Updated successfully!");
 		}else {
-			if(userRepository.findByUsername(user.getUsername()).isEmpty()) {
+			if(!userRepository.findByUsername(user.getUsername()).isPresent()) {
 				userService.saveUser(user);
 		        redirectAttributes.addFlashAttribute("success", "User saved successfully!");
 			}else {	

@@ -1,6 +1,6 @@
 package com.example.library.book.entity;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "fines")

@@ -49,7 +49,7 @@
     </form>
 
     <!-- Add New Patient -->
-    <a th:href="@{/addUser}" class="btn btn-success mb-3">+ Add Book</a>
+    <a th:href="@{/addBook}" class="btn btn-success mb-3">+ Add Book</a>
     
      <table class="table table-bordered table-striped">
         <thead>
@@ -67,7 +67,7 @@
             	<td th:text="${book.title}"></td>
                 <td th:text="${book.author.name}"></td>
                 <td th:text="${book.category.name}"></td>
-                <td th:text="${book.publisher.name}"></td>                
+                <td th:if="${book.publisher != null}" th:text="${book.publisher.name}"></td>                
                 <td th:text="${book.copiesAvailable}"></td>
                 <td th:text="${book.copiesTotal}"></td>
                 

@@ -6,6 +6,7 @@ import com.example.library.book.repository.UserRepository;
 import com.example.library.core.util.AppDataUtil;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
@@ -34,7 +35,7 @@ public class UserService {
     	
     	String code =  (String) properties.get("registration.site.code");		
         String datePart = LocalDate.now().format(DateTimeFormatter.ofPattern("ddMMyy"));
-        long countToday = userRepository.countByCreatedAtToday(LocalDate.now());
+        long countToday = userRepository.countByCreatedAtToday(LocalDate.now().atStartOfDay(),LocalDate.now().plusDays(1).atStartOfDay());
         String registerId = "RG-" + code + datePart + "-" + (countToday + 1);
         user.setRegisterId(registerId);
         return userRepository.save(user);

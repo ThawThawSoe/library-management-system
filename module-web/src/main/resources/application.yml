@@ -4,7 +4,16 @@ spring:
     username: root
     password: mysql4535
     driver-class-name: com.mysql.cj.jdbc.Driver
-
+  application:
+    name: library
+    http:
+      encoding:
+        enabled: true
+        charset: UTF-8
+        force: true
+  mvc:
+    converters:
+      preferred-json-mapper: jackson
   jpa:
     hibernate:
       ddl-auto: update
@@ -26,7 +35,6 @@ server:servlet:session:timeout: 30m
 #logging:
 #  level:
 #    org.thymeleaf: DEBUG
-spring:application:name: library
 server:
   port: 8080
   servlet:

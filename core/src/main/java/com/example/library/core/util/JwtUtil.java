@@ -31,10 +31,10 @@ public class JwtUtil {
 	
 	public static boolean validateToken(String token) {
         try {
-        	Jwts.parser()
-            .verifyWith(SECRET_KEY)
+        	Jwts.parserBuilder()
+            .setSigningKey(SECRET_KEY)
             .build()
-            .parseSignedClaims(token);        	
+            .parseClaimsJws(token);        	
         	
             return true;
         } catch (JwtException | IllegalArgumentException e) {

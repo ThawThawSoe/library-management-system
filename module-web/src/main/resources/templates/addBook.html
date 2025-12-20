@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <title>Add User</title>  
+    <link th:href="@{/css/mystyle.css}" rel="stylesheet">   
+</head>
+<body>
+<!-- Insert into layout -->
+    <div th:fragment="content">
+    <div class="container mt-4">
+	    <div class="card shadow-sm rounded-3">	 
+	    <div class="card-header text-white d-flex justify-content-between align-items-center" 
+	    style="background-color: #ABB9B7 !important;
+  color: white !important;">
+	      <h4 class="mb-0" th:text="${isEdit} ? 'Edit Book' : 'Add New Book'"></h4>	     
+	      <a th:href="@{/books}"   class="btn btn-light btn-sm">Back to List</a>
+	    </div>     		
+
+    <!-- <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+    <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div> -->
+	<div class="card-body">
+	<div id="message" style="color:red; margin-bottom: 10px;"></div>
+	   <form  onsubmit="return validateForm()" th:action="@{/saveBook}" th:object="${book}" method="post" id="form">
+	    	<!-- <input type="hidden" name="isEdit" th:value="${isEdit}" />
+	    	<input type="hidden" name="userId" th:field="*{userId}" /> -->
+	    	 <!-- Title -->
+	        <div class="row mb-3">
+	            <label class="col-sm-3 col-form-label">Book Title</label>
+	            <div class="col-sm-5">
+	            <input type="text" class="form-control" name="title"
+	                   placeholder="Enter Book Title"
+	                   th:field="*{title}"  >
+	            </div>
+	           <div class="col-sm-3 text-danger small titleError"></div>
+	                         	
+	        </div>	
+	        <!-- ISBN -->
+	         <div class="row mb-3">
+	            <label class="col-sm-3 col-form-label">ISBN</label>
+	            <div class="col-sm-5">
+		            <input type="text" id="isbn" name="isbn" th:field="*{isbn}"  class="form-control" >
+	            </div>
+	            <div class="col-sm-3 text-danger small isbnError"></div>
+	             <div th:if="${isbnError}" style="color:red">
+			        <p th:text="${isbnError}"></p>
+			    </div>
+	        </div>
+	        
+	        <!-- Publisher Year -->
+	         <div class="row mb-3">
+	            <label class="col-sm-3 col-form-label">Publisher Year</label>
+	            <div class="col-sm-5">
+		            <input type="text" id="publishedYear" name="publishedYear" th:field="*{publishedYear}"  class="form-control" >
+	            </div>
+	            <div class="col-sm-3 text-danger small publishedYearError"></div>
+	        </div>
+	        <!-- Copy Total -->
+	        <div class="row mb-3">
+	            <label class="col-sm-3 col-form-label">Copy Total</label>
+	            <div class="col-sm-5">
+		            <input type="text" id="copiesTotal" name="copiesTotal" th:field="*{copiesTotal}"  class="form-control" >
+	            </div>
+	            <div class="col-sm-3 text-danger small copiesTotalError"></div>
+	        </div>
+	        
+	          <!-- Copy Available -->
+	        <div class="row mb-3">
+	            <label class="col-sm-3 col-form-label">Copy Available</label>
+	            <div class="col-sm-5">
+		            <input type="text" id="copiesAvailable" name="copiesAvailable" th:field="*{copiesAvailable}"  class="form-control" >
+	            </div>
+	            <div class="col-sm-3 text-danger small copiesAvailableError"></div>
+	             <div th:if="${copiesAvailableError}" style="color:red">
+			        <p th:text="${copiesAvailableError}"></p>
+			    </div>
+	        </div>
+	        <!-- Author -->
+	        
+	        <div class="row mb-3">
+	            <label class="col-sm-3 col-form-label">Author</label>
+	            <div class="col-sm-5">
+		            <input type="text" id="authorInput" 
+		               class="form-control authorInput" 
+	                   placeholder="Type Author Name"
+	                   autocomplete="off" >
+	                   <ul id="authorSuggestions" class="list-group"></ul>
+	            	<input type="hidden"  name="authorId" id="authorId">
+	            </div>
+	            <div class="col-sm-3 text-danger small authorError"></div>
+	             <div th:if="${authorError}" style="color:red">
+			        <p th:text="${authorError}"></p>
+			    </div>
+	        </div>
+	        
+	        <div class="row mb-3">
+	            <label class="col-sm-3 col-form-label">Category</label>
+	            <div class="col-sm-5">
+		            <input type="text" id="categoryInput" 
+		               class="form-control categoryInput" 
+	                   placeholder="Type Category Name"
+	                   autocomplete="off" >
+	                   <ul id="categorySuggestions"></ul>
+	            	<input type="hidden"  name="categoryId" id="categoryId">
+	            </div>
+	            <div class="col-sm-3 text-danger small categoryError"></div>
+	             <div th:if="${categoryError}" style="color:red">
+			        <p th:text="${categoryError}"></p>
+			    </div>
+	        </div>
+	        
+	        <div class="row mb-3">
+	            <label class="col-sm-3 col-form-label">Publisher</label>
+	            <div class="col-sm-5">
+		            <input type="text" id="publisherInput" 
+		               class="form-control" 
+	                   placeholder="Type Publisher Name"
+	                   autocomplete="off" >
+	                   <ul id="publisherSuggestions"></ul>
+	            	<input type="hidden"  name="publisherId" id="publisherId">
+	            </div>
+	            
+	        </div>
+	       	 
+	        <div class="d-flex justify-content-end">
+	        <button type="submit" class="btn btn-primary"
+	                th:text="${isEdit} ? 'Update Book' : 'Add Book'"></button>
+	         </div>       
+			
+	    </form>
+	    
+	<script>
+	function isValidInteger(value) {
+	    return Number.isInteger(Number(value));
+	}
+	function validateForm() {
+
+	    let title = document.querySelector("[name='title']").value.trim();
+	    let isbn = document.querySelector("[name='isbn']").value.trim();
+	    let year = document.querySelector("[name='publishedYear']").value.trim();
+	    let total = document.querySelector("[name='copiesTotal']").value;
+	    let available = document.querySelector("[name='copiesAvailable']").value;
+	    
+	    let authorText = document.querySelector(".authorInput").value.trim();
+	    let authorId = document.querySelector("[name='authorId']").value;
+	    let categoryText = document.querySelector(".categoryInput").value.trim();
+	    let categoryId = document.querySelector("[name='categoryId']").value;
+
+	    let titleError = document.querySelector(".titleError");
+	    let isbnError = document.querySelector(".isbnError");
+	    let publishedYearError = document.querySelector(".publishedYearError");
+	    let copiesTotalError = document.querySelector(".copiesTotalError");
+	    let copiesAvailableError = document.querySelector(".copiesAvailableError");
+	    let authorError = document.querySelector(".authorError");
+	    let categoryError = document.querySelector(".categoryError");
+	    
+	    let yearRegex = /^(19|20)\d{2}$/;
+	    
+	 // Clear previous error
+        titleError.textContent = "";
+        isbnError.textContent = "";
+        publishedYearError.textContent = "";
+        copiesTotalError.textContent = "";
+        copiesAvailableError.textContent = "";
+
+	    if (title === "") {
+	    	titleError.textContent  = "Title is required";
+	        return false;
+	    }else if( title.length > 200){
+	    	titleError.textContent  = "Title must not exceed 200 characters";
+            return;
+		}
+		
+	    console.log("isbn "+ isbn);
+	    if (isbn === "") {
+	    	isbnError.textContent  = "ISBN is required";
+	        return false;
+	    }else if( isbn.length > 200){
+	    	isbnError.textContent  = "ISBN must not exceed 200 characters";
+            return;
+		}
+	    
+	    console.log("isbn "+ isbn);
+	    if (year === "") {
+	    	publishedYearError.textContent  = "Publisher Year is required";
+	        return false;
+	    }else if (!yearRegex.test(year)) {
+	    	publishedYearError.textContent  = "Publisher Year must be a valid year (e.g. 2024)";
+	        return false;
+	    }
+		
+	    console.log("isbn after "+ isbn);
+	    if (total === "") {
+	    	copiesTotalError.textContent  = "Copy Total is required";
+	        return false;
+	    }else if(!isValidInteger(total)){
+	    	copiesTotalError.textContent  = "Copy Total is invalid";
+	        return false;
+		}else if (parseInt(total) < 1) {
+	    	copiesTotalError.textContent  = "Copy Total must be at least 1";
+	        return false;
+	    }
+		
+	    
+	    if (available === "") {
+	    	copiesAvailableError.textContent  = "Copy Available is required";
+	        return false;
+	    }else if (!isValidInteger(available)) {
+	    	copiesAvailableError.textContent  = "Copy Available is invalid";
+	        return false;
+	    }else if (parseInt(available) < 0) {
+	    	copiesAvailableError.textContent  = "Copy Available cannot be negative";
+	        return false;
+	    }
+	    
+	   
+
+	    if (parseInt(available) > parseInt(total)) {
+	    	copiesAvailableError.textContent  = "Copy Available cannot exceed total copies";
+	        return false;
+	    }
+	    
+	    if (authorText === "") {
+	    	authorError.textContent = "Author is required";
+	        return false;
+	    }
+
+	    if (authorId === "") {
+	        authorError.textContent = "Please select an author from the list";
+	        return false;
+	    }
+	    
+	    if (categoryText === "") {
+	    	categoryError.textContent = "Category is required";
+	        return false;
+	    }
+
+	    if (categoryId === "") {
+	        categoryError.textContent = "Please select an category from the list";
+	        return false;
+	    }
+
+
+	    return true;
+	}
+	
+	
+	function setupAutocomplete(inputId, suggestionId, hiddenId, apiUrl, idField, nameField) {
+
+	    const input = document.getElementById(inputId);
+	    const suggestions = document.getElementById(suggestionId);
+	    const hiddenInput = document.getElementById(hiddenId);
+
+	    input.addEventListener("input", function () {
+	        const query = input.value.trim();
+
+	        if (query.length < 2) {
+	            suggestions.innerHTML = "";
+	            hiddenInput.value = "";
+	            return;
+	        }
+
+	        fetch(`${apiUrl}?keyword=${query}`)
+	            .then(res => res.json())
+	            .then(data => {
+	                suggestions.innerHTML = "";
+
+	                data.forEach(item => {
+	                    const li = document.createElement("li");
+	                    li.textContent = item[nameField];
+	                    li.classList.add("list-group-item");
+
+	                    li.onclick = function () {
+	                        input.value = item[nameField];
+	                        hiddenInput.value = item[idField];
+	                        suggestions.innerHTML = "";
+	                    };
+
+	                    suggestions.appendChild(li);
+	                });
+	            });
+	    });
+	}
+	setupAutocomplete(
+		    "authorInput",
+		    "authorSuggestions",
+		    "authorId",
+		    "/library/api/authors/search",
+		    "author_id",
+		    "author_name"
+		);
+	
+	setupAutocomplete(
+		    "categoryInput",
+		    "categorySuggestions",
+		    "categoryId",
+		    "/library/api/categorys/search",
+		    "category_id",
+		    "category_name"
+		);
+	
+	
+	setupAutocomplete(
+		    "publisherInput",
+		    "publisherSuggestions",
+		    "publisherId",
+		    "/library/api/publishers/search",
+		    "publisher_id",
+		    "publisher_name"
+		);
+    </script>
+
+	 </div>
+   </div>
+   </div>
+
+  
+   
+ </div> 
+ 
+ 
+ 
+</body>
+</html>
+   

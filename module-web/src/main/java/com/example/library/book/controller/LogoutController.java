@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import com.example.library.book.entity.User;
 
-import jakarta.servlet.http.HttpSession;
+import javax.servlet.http.HttpSession;
 
 @Controller
 public class LogoutController {
