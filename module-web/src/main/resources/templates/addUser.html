@@ -24,7 +24,9 @@
 	    	<input type="hidden" name="isEdit" th:value="${isEdit}" />
 	    	<input type="hidden" name="userId" th:field="*{userId}" />
 	        <div class="row mb-3">
-	            <label class="col-sm-3 col-form-label">Username</label>
+	            <label class="col-sm-3 col-form-label">
+	            	User Name <span class="text-danger">*</span>
+	            </label>
 	            <div class="col-sm-5">
 	            <input type="text" class="form-control" name="username"
 	                   placeholder="Enter username"
@@ -33,11 +35,14 @@
 	            <div class="col-sm-3 text-danger small username-error"></div>
 	            <div th:if="${usernameError}" style="color:red">
 			        <p th:text="${usernameError}"></p>
-			    </div>	                    	
+			    </div>
+			    <div class="col-sm-3 text-danger small" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></div> 	                    	
 	        </div>
 	
 	        <div class="row mb-3">
-	            <label class="col-sm-3 col-form-label">Password</label>
+	            <label class="col-sm-3 col-form-label">
+	            	Password <span class="text-danger">*</span>
+	            </label>
 	            <div class="col-sm-5">
 	            	<input type="password" class="form-control" name="password"
 	                   placeholder="Enter password"
@@ -47,6 +52,7 @@
 	             <div th:if="${passwordError}" style="color:red">
 			        <p th:text="${passwordError}"></p>
 			    </div>
+			    <div class="col-sm-3 text-danger small" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div> 
 	        </div>
 	        
 			<div class="row mb-3">
@@ -57,26 +63,57 @@
 	                   th:field="*{fullName}">
 	             </div>
 	             <div class="col-sm-3 text-danger fullName-error"></div>
+	             <div class="col-sm-3 text-danger small" th:if="${#fields.hasErrors('fullName')}" th:errors="*{fullName}"></div> 
+	        </div>
+	        
+	        <div class="row mb-3">
+	            <label class="col-sm-3 col-form-label">Phone No.</label>
+	            <div class="col-sm-5">
+	            <input type="text" class="form-control" name="phoneNo" id="phoneNo"
+	                   placeholder="Enter Phone No."
+	                   th:field="*{phoneNo}">
+	             </div>
+	             <div class="col-sm-3 text-danger phoneNo-error"></div>
+	             <div class="col-sm-3 text-danger small" th:if="${#fields.hasErrors('phoneNo')}" th:errors="*{phoneNo}"></div> 
+	        </div>
+	        
+	        <div class="row mb-3">
+	            <label class="col-sm-3 col-form-label">Address</label>
+	            <div class="col-sm-5">
+	            <input type="text" class="form-control" name="address" id="address"
+	                   placeholder="Enter Address"
+	                   th:field="*{address}">
+	             </div>
+	             <div class="col-sm-3 text-danger address-error"></div>
+	             <div class="col-sm-3 text-danger small" th:if="${#fields.hasErrors('address')}" th:errors="*{address}"></div> 
+	        </div>
+	        <div class="row mb-3">
 	        </div>
 	        <div class="row mb-3">
 	            <label class="col-sm-3 col-form-label">Email</label>
 	            <div class="col-sm-5">
-	            	<input type="text" class="form-control" name="email"
+	            	<input type="text" class="form-control" name="email" id="email"
 	                   placeholder="Enter email"
 	                   th:field="*{email}" >
 	             </div>
-	              <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>     
+	             <div class="col-sm-3 text-danger small email-error" ></div>
+	              <div class="col-sm-3 text-danger small " th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>     
 	        </div>
+	        
 	
 	        <div class="row mb-3">
-	            <label class="col-sm-3 col-form-label">Role</label>
+	            <label class="col-sm-3 col-form-label">
+	            	Role <span class="text-danger">*</span>
+	            </label>
 	            <div class="col-sm-5">
-		            <select th:field="*{role}" class="form-select" name="role" required>
-		                <option value="" disabled>Select role</option>
-		                <option th:each="r : ${roles}" th:value="${r}" th:text="${r}">
+		            <select th:field="*{role}" class="form-select" name="role" id="role" >
+		                <option value="" >Select role</option>
+		                <option th:each="r : ${roles}" th:value="${r}" th:text="${r}"  >		                
 		                </option>
 		            </select>
 	            </div>
+	            <div class="col-sm-3 text-danger small role-error" ></div>
+	             <div class="col-sm-3 text-danger small" th:if="${#fields.hasErrors('role')}" th:errors="*{role}"></div>
 	        </div>
 			<div class="d-flex justify-content-end">
 	        <button type="submit" class="btn btn-primary"
@@ -93,11 +130,18 @@
 	    const usernameInput = document.getElementById('username');
 	    const password = document.getElementById('password');
 	    const fullName = document.getElementById('fullName');
-	    
+	    const phoneNo = document.getElementById('phoneNo');
+	    const address = document.getElementById('address');
+	    const roleSelect = document.getElementById('role');
+	    const email = document.getElementById('email');
 	    
 	    const nameError = form.querySelector(".username-error");
 	    const passwordError = form.querySelector(".password-error");
 	    const fullNameError = form.querySelector(".fullName-error");
+	    const phoneNoError = form.querySelector(".phoneNo-error");
+	    const addressError = form.querySelector(".address-error");
+	    const roleError = form.querySelector(".role-error");
+	    const emailError = form.querySelector(".email-error");
 	    
 		
 
@@ -111,29 +155,46 @@
 
 	        // Check username length
 	        if (!usernameInput.value || usernameInput.value.trim() === "") {
-	        	nameError.textContent = "Username cannot be empty";
+	        	nameError.textContent = "Username is required";
 	            return;
 	        }
-	        else if( usernameInput.value.length > 50){
-	        	nameError.textContent  = "Username cannot be longer than 50 characters";
+	        else if( usernameInput.value.length > 100){
+	        	nameError.textContent  = "Username must not be exceed than 100 characters";
 	             return;
 			}
 
 	        if (!password.value || password.value.trim() === "" ) {
-	        	passwordError.textContent = "Password cannot be empty ";
+	        	passwordError.textContent = "Password is required ";
 	            return;
 	        }else if(password.value.length < 6 ){
-	        	passwordError.textContent = "Password cannot be empty or greater than 6 digit";
+	        	passwordError.textContent = "Password should be greater than 6 characters";
 	            return;
 			}
 	        
-	        if (!fullName.value || fullName.value.trim() === "") {
-	        	fullNameError.textContent = "Full Name cannot be empty";
-	            return;
-	        }else if( fullName.value.length > 50){
-	        	fullNameError.textContent = "Full Name cannot be longer than 50 characters";
+	      if(fullName.value && fullName.value.trim() != "" && fullName.value.length > 50){
+	        	fullNameError.textContent = "Full Name must not be exceed than 50 characters";
 	            return;
 			}
+	      
+	      if(phoneNo.value && phoneNo.value.trim() != "" && phoneNo.value.length > 15){
+	    	  phoneNoError.textContent = "Phone No. must not be exceed than 15 characters";
+	            return;
+			}
+	      
+	      if(email.value && email.value.trim() != "" && email.value.length > 50){
+	    	  emailError.textContent = "Email must not be exceed than 50 characters";
+	            return;
+			}
+	      
+	      if (!roleSelect.value || roleSelect.value.trim() === "") {
+		    	roleError.textContent = "Please select an Role ";
+			     return false;
+		    }
+	      
+	      if(address.value && address.value.trim() != "" && address.value.length > 100){
+	        	addressError.textContent = "Address must not be exceed than 100 characters";
+	            return;
+	      }
 
 	        form.submit();
 	        

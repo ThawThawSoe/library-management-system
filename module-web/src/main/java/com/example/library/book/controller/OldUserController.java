@@ -31,7 +31,7 @@ public class OldUserController {
 
     @PostMapping("/createUser")
     public User createUser(@RequestBody User user) {
-        return userService.saveUser(user);
+        return userService.saveUser(user,user);
     }
 
     @DeleteMapping("/{id}")

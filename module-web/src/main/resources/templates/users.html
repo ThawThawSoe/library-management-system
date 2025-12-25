@@ -4,8 +4,9 @@
     <title>Patient List</title>
     </head>
 <body>
+
 <!-- Insert into layout -->
-    <div th:fragment="content">
+<div th:fragment="content">
      <h2>Users List</h2>
 <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
 <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
@@ -50,7 +51,7 @@
   	</div>
 
    </div>
-   
+ <script th:src="@{/js/myjavascript.js}"></script>  
 </body>
 </html>
    

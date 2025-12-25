@@ -2,7 +2,30 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <title>Add User</title>  
-    <link th:href="@{/css/mystyle.css}" rel="stylesheet">   
+    <link th:href="@{/css/mystyle.css}" rel="stylesheet">
+    <style>
+.listSuggestions {
+    list-style: none;
+    border: 1px solid #ccc;
+    max-height: 150px;
+    overflow-y: auto;
+    position: absolute;
+    background: white;
+    padding: 0;
+    margin: 0;
+    width: 250px;
+    z-index: 1000;
+}
+
+.listSuggestions li {
+    padding: 8px;
+    cursor: pointer;
+}
+
+.listSuggestions li:hover {
+    background-color: #f0f0f0;
+}
+</style>   
 </head>
 <body>
 <!-- Insert into layout -->
@@ -16,31 +39,38 @@
 	      <a th:href="@{/books}"   class="btn btn-light btn-sm">Back to List</a>
 	    </div>     		
 
-    <!-- <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
-    <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div> -->
+    <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+    <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
 	<div class="card-body">
 	<div id="message" style="color:red; margin-bottom: 10px;"></div>
 	   <form  onsubmit="return validateForm()" th:action="@{/saveBook}" th:object="${book}" method="post" id="form">
-	    	<!-- <input type="hidden" name="isEdit" th:value="${isEdit}" />
-	    	<input type="hidden" name="userId" th:field="*{userId}" /> -->
+	    	<input type="hidden" name="isEdit" th:value="${isEdit}" />
+	    	<input type="hidden" name="bookId" th:field="*{bookId}" /> 
 	    	 <!-- Title -->
 	        <div class="row mb-3">
-	            <label class="col-sm-3 col-form-label">Book Title</label>
+	            <label class="col-sm-3 col-form-label">
+	            	Book Title <span class="text-danger">*</span>
+	            </label>
 	            <div class="col-sm-5">
-	            <input type="text" class="form-control" name="title"
+	            <input type="text" class="form-control" 
+	            		name="title"
 	                   placeholder="Enter Book Title"
 	                   th:field="*{title}"  >
 	            </div>
 	           <div class="col-sm-3 text-danger small titleError"></div>
-	                         	
+	           <div th:if="${#fields.hasErrors('title')}" th:errors="*{title}" class="col-sm-3 text-danger small"></div>              	
 	        </div>	
 	        <!-- ISBN -->
 	         <div class="row mb-3">
-	            <label class="col-sm-3 col-form-label">ISBN</label>
+	            <label class="col-sm-3 col-form-label">
+	            	ISBN <span class="text-danger">*</span>
+	            </label>
 	            <div class="col-sm-5">
 		            <input type="text" id="isbn" name="isbn" th:field="*{isbn}"  class="form-control" >
 	            </div>
 	            <div class="col-sm-3 text-danger small isbnError"></div>
+	            <div th:if="${#fields.hasErrors('isbn')}" th:errors="*{isbn}" class="text-danger">
+	            </div>
 	             <div th:if="${isbnError}" style="color:red">
 			        <p th:text="${isbnError}"></p>
 			    </div>
@@ -48,64 +78,87 @@
 	        
 	        <!-- Publisher Year -->
 	         <div class="row mb-3">
-	            <label class="col-sm-3 col-form-label">Publisher Year</label>
+	            <label class="col-sm-3 col-form-label">
+	            	Publisher Year <span class="text-danger">*</span>
+	            </label>
 	            <div class="col-sm-5">
 		            <input type="text" id="publishedYear" name="publishedYear" th:field="*{publishedYear}"  class="form-control" >
 	            </div>
+	            <div th:if="${#fields.hasErrors('publishedYear')}" th:errors="*{publishedYear}" class="col-sm-3 text-danger small"></div>   
 	            <div class="col-sm-3 text-danger small publishedYearError"></div>
+	           
 	        </div>
 	        <!-- Copy Total -->
 	        <div class="row mb-3">
-	            <label class="col-sm-3 col-form-label">Copy Total</label>
+	            <label class="col-sm-3 col-form-label">
+	            	Copy Total <span class="text-danger">*</span>
+	            </label>
 	            <div class="col-sm-5">
 		            <input type="text" id="copiesTotal" name="copiesTotal" th:field="*{copiesTotal}"  class="form-control" >
 	            </div>
 	            <div class="col-sm-3 text-danger small copiesTotalError"></div>
+	            <div th:if="${#fields.hasErrors('copiesTotal')}" th:errors="*{copiesTotal}" class="col-sm-3 text-danger small"></div>   
+	           
 	        </div>
 	        
 	          <!-- Copy Available -->
 	        <div class="row mb-3">
-	            <label class="col-sm-3 col-form-label">Copy Available</label>
+	            <label class="col-sm-3 col-form-label">
+	           		Copy Available <span class="text-danger">*</span>
+	           	</label>
 	            <div class="col-sm-5">
 		            <input type="text" id="copiesAvailable" name="copiesAvailable" th:field="*{copiesAvailable}"  class="form-control" >
 	            </div>
 	            <div class="col-sm-3 text-danger small copiesAvailableError"></div>
-	             <div th:if="${copiesAvailableError}" style="color:red">
-			        <p th:text="${copiesAvailableError}"></p>
-			    </div>
+	            <div th:if="${#fields.hasErrors('copiesAvailable')}" th:errors="*{copiesAvailable}" class="col-sm-3 text-danger small"></div>   
+	 
 	        </div>
 	        <!-- Author -->
 	        
 	        <div class="row mb-3">
-	            <label class="col-sm-3 col-form-label">Author</label>
+	            <label class="col-sm-3 col-form-label">
+	            	Author <span class="text-danger">*</span>
+	            </label>
 	            <div class="col-sm-5">
 		            <input type="text" id="authorInput" 
 		               class="form-control authorInput" 
 	                   placeholder="Type Author Name"
+	                  th:value="*{author != null ? author.name : ''}"
 	                   autocomplete="off" >
-	                   <ul id="authorSuggestions" class="list-group"></ul>
-	            	<input type="hidden"  name="authorId" id="authorId">
+	                   <ul id="authorSuggestions" class="list-group listSuggestions" ></ul>
+	            	<input type="hidden"	            	
+	            	th:field="*{author.author_id}"
+	            	name="authorId" id="authorId">
 	            </div>
-	            <div class="col-sm-3 text-danger small authorError"></div>
-	             <div th:if="${authorError}" style="color:red">
-			        <p th:text="${authorError}"></p>
-			    </div>
+	            <div class="col-sm-3 text-danger small authorError"></div>	             
+			    <div th:if="${#fields.hasErrors('author')}" th:errors="*{author}" class="col-sm-3 text-danger small"></div>
 	        </div>
 	        
 	        <div class="row mb-3">
-	            <label class="col-sm-3 col-form-label">Category</label>
+	            <label class="col-sm-3 col-form-label">
+	            	Category <span class="text-danger">*</span>
+	            </label>
 	            <div class="col-sm-5">
-		            <input type="text" id="categoryInput" 
-		               class="form-control categoryInput" 
-	                   placeholder="Type Category Name"
-	                   autocomplete="off" >
-	                   <ul id="categorySuggestions"></ul>
-	            	<input type="hidden"  name="categoryId" id="categoryId">
+	            
+	            	<select th:field="*{category}" class="form-select" name="category" id="category" >
+	            		<option value="">Select Category</option>
+	            		<option th:each="c : ${categorylist}" 
+	            		th:value="${c.category_id}" 
+	            		th:text="${c.name}"  >
+	            	</select>
+	            	
+<!-- 		            <input type="text" id="categoryInput"  -->
+<!-- 		               class="form-control categoryInput"  -->
+<!-- 	                   placeholder="Type Category Name" -->
+<!-- 	                   th:field="*{category.name}" -->
+<!-- 	                   autocomplete="off" > -->
+<!-- 	                   <ul id="categorySuggestions" class="list-group listSuggestions"></ul> -->
+<!-- 	            	<input type="hidden" -->
+<!-- 	            		th:field="*{category.category_id}" -->
+<!-- 	            	  name="categoryId" id="categoryId"> -->
 	            </div>
-	            <div class="col-sm-3 text-danger small categoryError"></div>
-	             <div th:if="${categoryError}" style="color:red">
-			        <p th:text="${categoryError}"></p>
-			    </div>
+	            <div class="col-sm-3 text-danger small categoryError"></div>	             
+			    <div th:if="${#fields.hasErrors('category')}" th:errors="*{category}" class="col-sm-3 text-danger small"></div>
 	        </div>
 	        
 	        <div class="row mb-3">
@@ -114,9 +167,13 @@
 		            <input type="text" id="publisherInput" 
 		               class="form-control" 
 	                   placeholder="Type Publisher Name"
+	                   th:value="*{publisher != null ? publisher.name : ''}"
 	                   autocomplete="off" >
-	                   <ul id="publisherSuggestions"></ul>
-	            	<input type="hidden"  name="publisherId" id="publisherId">
+	                   <ul id="publisherSuggestions" class="list-group listSuggestions"></ul>
+	            	<input type="hidden"
+	            	th:field="*{publisher.publisher_id}"  
+	            	name="publisherId"
+	            	 id="publisherId">
 	            </div>
 	            
 	        </div>
@@ -134,17 +191,19 @@
 	}
 	function validateForm() {
 
+
 	    let title = document.querySelector("[name='title']").value.trim();
 	    let isbn = document.querySelector("[name='isbn']").value.trim();
 	    let year = document.querySelector("[name='publishedYear']").value.trim();
 	    let total = document.querySelector("[name='copiesTotal']").value;
-	    let available = document.querySelector("[name='copiesAvailable']").value;
+	    let available = document.querySelector("[name='copiesAvailable']").value;	      
 	    
-	    let authorText = document.querySelector(".authorInput").value.trim();
-	    let authorId = document.querySelector("[name='authorId']").value;
-	    let categoryText = document.querySelector(".categoryInput").value.trim();
-	    let categoryId = document.querySelector("[name='categoryId']").value;
-
+	    
+        let authorText = document.querySelector(".authorInput").value.trim();
+	    
+        let categorySelect = document.getElementById("category");
+	    
+	    
 	    let titleError = document.querySelector(".titleError");
 	    let isbnError = document.querySelector(".isbnError");
 	    let publishedYearError = document.querySelector(".publishedYearError");
@@ -162,15 +221,15 @@
         copiesTotalError.textContent = "";
         copiesAvailableError.textContent = "";
 
-	    if (title === "") {
-	    	titleError.textContent  = "Title is required";
-	        return false;
-	    }else if( title.length > 200){
-	    	titleError.textContent  = "Title must not exceed 200 characters";
-            return;
-		}
+ 	    if (title === "") {
+ 	    	titleError.textContent  = "Title is required";
+ 	        return false;
+ 	    }else if( title.length > 100){
+ 	    	titleError.textContent  = "Title must not exceed 100 characters";
+             return;
+ 		}
 		
-	    console.log("isbn "+ isbn);
+	    
 	    if (isbn === "") {
 	    	isbnError.textContent  = "ISBN is required";
 	        return false;
@@ -179,7 +238,7 @@
             return;
 		}
 	    
-	    console.log("isbn "+ isbn);
+	    
 	    if (year === "") {
 	    	publishedYearError.textContent  = "Publisher Year is required";
 	        return false;
@@ -188,7 +247,7 @@
 	        return false;
 	    }
 		
-	    console.log("isbn after "+ isbn);
+	    
 	    if (total === "") {
 	    	copiesTotalError.textContent  = "Copy Total is required";
 	        return false;
@@ -196,7 +255,7 @@
 	    	copiesTotalError.textContent  = "Copy Total is invalid";
 	        return false;
 		}else if (parseInt(total) < 1) {
-	    	copiesTotalError.textContent  = "Copy Total must be at least 1";
+	    	copiesTotalError.textContent  = "Copy Total must be >= 1";
 	        return false;
 	    }
 		
@@ -229,15 +288,12 @@
 	        return false;
 	    }
 	    
-	    if (categoryText === "") {
-	    	categoryError.textContent = "Category is required";
-	        return false;
+	    if (!categorySelect.value || categorySelect.value.trim() === "") {
+	    	categoryError.textContent = "Please select an Category ";
+		     return false;
 	    }
 
-	    if (categoryId === "") {
-	        categoryError.textContent = "Please select an category from the list";
-	        return false;
-	    }
+	    
 
 
 	    return true;
@@ -260,7 +316,7 @@
 	        }
 
 	        fetch(`${apiUrl}?keyword=${query}`)
-	            .then(res => res.json())
+	            .then(res => return res.json())
 	            .then(data => {
 	                suggestions.innerHTML = "";
 
@@ -287,16 +343,8 @@
 		    "/library/api/authors/search",
 		    "author_id",
 		    "author_name"
-		);
+		);	
 	
-	setupAutocomplete(
-		    "categoryInput",
-		    "categorySuggestions",
-		    "categoryId",
-		    "/library/api/categorys/search",
-		    "category_id",
-		    "category_name"
-		);
 	
 	
 	setupAutocomplete(

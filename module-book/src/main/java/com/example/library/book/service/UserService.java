@@ -31,28 +31,34 @@ public class UserService {
         return userRepository.findById(id);
     }
 
-    public User saveUser(User user) {
+    public User saveUser(User user,User currentUser) {
     	
     	String code =  (String) properties.get("registration.site.code");		
         String datePart = LocalDate.now().format(DateTimeFormatter.ofPattern("ddMMyy"));
         long countToday = userRepository.countByCreatedAtToday(LocalDate.now().atStartOfDay(),LocalDate.now().plusDays(1).atStartOfDay());
         String registerId = "RG-" + code + datePart + "-" + (countToday + 1);
-        user.setRegisterId(registerId);
+        user.setRegisterId(registerId);       
+        user.setCreatedBy(currentUser.getUsername());
         return userRepository.save(user);
     }
 
     public void deleteUser(Long id) {
         userRepository.deleteById(id);
     }
-    public User updateUser(User updatedUser) {
+    public User updateUser(User updatedUser,User currentUser) {
         User existingUser = userRepository.findById(updatedUser.getUserId())
                 .orElseThrow(() -> new RuntimeException("User not found"));
         
+        existingUser.setAddress(updatedUser.getAddress());
+        existingUser.setPhoneNo(updatedUser.getPhoneNo());
+        existingUser.setFullName(updatedUser.getFullName());
         existingUser.setUsername(updatedUser.getUsername());
         existingUser.setEmail(updatedUser.getEmail());
         existingUser.setPassword(updatedUser.getPassword());
         existingUser.setRole(updatedUser.getRole());        
         
+        existingUser.setUpdatedAt(LocalDateTime.now());
+        existingUser.setUpdatedBy(currentUser.getUsername());
         return userRepository.save(existingUser);
     }
     

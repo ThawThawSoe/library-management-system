@@ -9,6 +9,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 
@@ -23,6 +24,7 @@ public class AuthorsController {
 	private AuthorRepository authorRepository;
 	
 	@GetMapping(value = "/search", produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
 	public List<AuthorDTO> searchAuthors(@RequestParam(value = "keyword", required = false) String keyword){
 		
 		if (keyword.length() < 2) {

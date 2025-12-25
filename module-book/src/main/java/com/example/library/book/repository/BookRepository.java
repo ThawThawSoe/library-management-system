@@ -30,4 +30,7 @@ public interface BookRepository extends JpaRepository<Book, Long>{
 		    @Param("author") String author,
 		    @Param("categoryId") Long categoryId
 		);
+	 
+	 @Query("SELECT count(b) > 0 FROM Book b WHERE b.isbn = :isbn ")
+	 boolean existISBN(@Param("isbn") String isbn);
 }

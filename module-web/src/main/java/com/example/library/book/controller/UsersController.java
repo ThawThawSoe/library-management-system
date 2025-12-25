@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -19,6 +20,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.example.library.book.entity.Book;
+import com.example.library.book.entity.Role;
 import com.example.library.book.entity.User;
 import com.example.library.book.repository.UserRepository;
 import com.example.library.book.service.UserService;
@@ -26,6 +29,7 @@ import com.example.library.core.util.AppDataUtil;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+
 
 @Controller
 public class UsersController {
@@ -42,9 +46,7 @@ public class UsersController {
 			{
 		
 		User user = (User) session.getAttribute("currentUser");
-		if(user == null) {
-			return "redirect:/login";
-		}
+		
 		List<User> userlist = null;
 		 
 		if(keyword == null || keyword.trim().isEmpty()) {
@@ -67,16 +69,15 @@ public class UsersController {
     public String deleteUser(@PathVariable Long id,HttpSession session,Model model) {
 		
 		User currentUser = (User) session.getAttribute("currentUser");
-		if(currentUser == null) {
-			return "redirect:/login";
-		}
 		
-		Optional<User> user =  userRepository.findById(id);
+		
+		User user =  userRepository.findById(id)
+				.orElseThrow(() -> new RuntimeException("User Not Found"));
 		//List<String> roles = Arrays.asList("ADMIN", "LIBRARIAN", "STUDENT");
 		model.addAttribute("user", user);
 		model.addAttribute("isEdit", true);
 		model.addAttribute("currentUser", currentUser);
-		model.addAttribute("roles", Arrays.asList("ADMIN", "LIBRARIAN", "STUDENT"));
+		model.addAttribute("roles", Role.values());
 		model.addAttribute("page", "addUser");
         return "layout"; // layout.html is rendered with fragment inside
 		
@@ -87,9 +88,7 @@ public class UsersController {
     public String showAddForm(HttpSession session,Model model) {        
         
         User currentUser = (User) session.getAttribute("currentUser");
-		if(currentUser == null) {
-			return "redirect:/login";
-		}		
+			
 		
 		// If user object not already in model (from flash), create a new one
         if (!model.containsAttribute("user")) {
@@ -98,7 +97,7 @@ public class UsersController {
 		
 		model.addAttribute("isEdit", false);
 		model.addAttribute("currentUser", currentUser);
-		model.addAttribute("roles", Arrays.asList("ADMIN", "LIBRARIAN", "STUDENT","MEMBER"));
+		model.addAttribute("roles", Role.values());
 		model.addAttribute("page", "addUser");
         return "layout"; // layout.html is rendered with fragment inside
     }
@@ -116,38 +115,34 @@ public class UsersController {
 	
 	@PostMapping("/save")
     public String saveUser(
-    		@ModelAttribute User user,
-    		@RequestParam(value = "isEdit", required = false) Boolean isEdit,    		
+    		@Valid @ModelAttribute("user") User user,
+    		BindingResult result,
+    		@RequestParam(value = "isEdit", required = false) Boolean isEdit,  
+    		HttpSession session,Model model,
     		 RedirectAttributes redirectAttributes
     		 ) {
-		boolean isValid = true; 	
-		if(user != null ) {
-			if (!AppDataUtil.checkInputValue(user.getUsername(), 50)) {
-	            redirectAttributes.addFlashAttribute("usernameError", "Username should be entered!");
-	            isValid = false;
-	        }
-			
-			if(!AppDataUtil.checkInputValueLess(user.getPassword(), 6)) {
-				redirectAttributes.addFlashAttribute("passwordError", "Password should be entered!");
-	            isValid = false;
-			}
-			
-			
-		}
 		
-		if(!isValid) {
-			redirectAttributes.addFlashAttribute("user", user);			
-			return "redirect:/addUser";
-			
-		}
+		User currentUser = (User) session.getAttribute("currentUser");        
+		model.addAttribute("currentUser", currentUser);
+		
+		if (result.hasErrors()) {
+			model.addAttribute("isEdit", isEdit);
+			model.addAttribute("roles", Role.values());
+	        model.addAttribute("page", "addUser");
+	        return "layout";
+	    }
+		
+		
 		    
 		if(isEdit) {
 			
-			userService.updateUser(user);
+			userService.updateUser(user,currentUser);
 	        redirectAttributes.addFlashAttribute("success", "User Updated successfully!");
 		}else {
+			//check user name already exist
 			if(!userRepository.findByUsername(user.getUsername()).isPresent()) {
-				userService.saveUser(user);
+				
+				userService.saveUser(user,currentUser);
 		        redirectAttributes.addFlashAttribute("success", "User saved successfully!");
 			}else {	
 				redirectAttributes.addFlashAttribute("user", user);

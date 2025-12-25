@@ -1,10 +1,5 @@
 package com.example.library.book.entity;
 
-
-
-
-
-
 import java.time.LocalDateTime;
 import java.util.Date;
 
@@ -18,6 +13,10 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "users")
@@ -29,31 +28,50 @@ public class User {
 	@Column(unique = true)
 	private String registerId;
 	
-	
-    @Column(nullable = false, unique = true, length = 50)
+	@Column(columnDefinition = "VARCHAR(100) CHARACTER SET utf8 COLLATE utf8mb4_unicode_ci",
+	nullable = false, unique = true, length = 50)
+	@NotBlank(message = "Username is required")
+	@Size(max = 100, message="Username must not exceed 100 characters")
     private String username;
 	
 	
     @Column(nullable = false)
+    @NotBlank(message = "Password is required")
+    @Size(min = 6, message = "Password should be greater than 6 characters")
     private String password;
 	
-	
-	
+    @Column(columnDefinition = "VARCHAR(100) CHARACTER SET utf8 COLLATE utf8mb4_unicode_ci")
+	@Size(max=50, message ="Full Name must not be exceed than 100 characters")
     private String fullName;
     
+	@Size(max=50, message ="Email must not be exceed than 50 characters")
 	private String email;
+	
+	@Column(columnDefinition = "VARCHAR(50) CHARACTER SET utf8 COLLATE utf8mb4_unicode_ci")
+	@Size(max=15, message ="Phone No must not be exceed than 15 characters")
+	private String phoneNo;
+	
+	@Column(columnDefinition = "VARCHAR(100) CHARACTER SET utf8 COLLATE utf8mb4_unicode_ci")
+	@Size(max=100, message ="Address must not be exceed than 100 characters")
+	private String address;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
+    @NotNull(message = "Role is required")
     private Role role;
 
     @Column(name = "created_at")
     private LocalDateTime   createdAt = LocalDateTime.now();
-
-    public enum Role {
-        ADMIN, LIBRARIAN, STUDENT,MEMBER
-    }
-
+    
+   
+    private String createdBy;
+    
+    
+    private LocalDateTime updatedAt;
+    
+    
+    private String updatedBy;
+    
 	public Long getUserId() {
 		return userId;
 	}
@@ -101,9 +119,6 @@ public class User {
 	public void setRole(Role role) {
 		this.role = role;
 	}
-
-	
-
 	
 
 	public LocalDateTime getCreatedAt() {
@@ -121,6 +136,48 @@ public class User {
 	public void setRegisterId(String registerId) {
 		this.registerId = registerId;
 	}
+
+	public String getPhoneNo() {
+		return phoneNo;
+	}
+
+	public void setPhoneNo(String phoneNo) {
+		this.phoneNo = phoneNo;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public String getCreatedBy() {
+		return createdBy;
+	}
+
+	public void setCreatedBy(String createdBy) {
+		this.createdBy = createdBy;
+	}
+
+	public LocalDateTime getUpdatedAt() {
+		return updatedAt;
+	}
+
+	public void setUpdatedAt(LocalDateTime updatedAt) {
+		this.updatedAt = updatedAt;
+	}
+
+	public String getUpdatedBy() {
+		return updatedBy;
+	}
+
+	public void setUpdatedBy(String updatedBy) {
+		this.updatedBy = updatedBy;
+	}
+	
+	
     
     
 }

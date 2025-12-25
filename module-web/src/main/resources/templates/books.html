@@ -25,14 +25,15 @@
         
         	<div class="col-md-3">
 	        <label class="form-label fw-bold">Author</label>	            
-	            <input type="text" class="form-control" name="author"
-	                   placeholder="Enter Author">
+	            <input type="text" class="form-control" th:value="${author}"  name="author"
+	                   placeholder="Search by Author">
 	         </div>      	
 	     
 	  
 	  <div class="col-md-3">
 	      <label class="form-label fw-bold">Category</label>       
 	      <select name="categoryId"  class="form-select">
+	       <option value="" >Select Category</option>
 	        <option th:each="c : ${categorylist}"
 	                th:value="${c.category_id}"
 	                th:text="${c.name}"
@@ -64,10 +65,13 @@
         </thead>
         <tbody id="userTable">
             <tr th:each="book : ${booklist}">
-            	<td th:text="${book.title}"></td>
-                <td th:text="${book.author.name}"></td>
-                <td th:text="${book.category.name}"></td>
-                <td th:if="${book.publisher != null}" th:text="${book.publisher.name}"></td>                
+            	<td><a th:href="@{'/updateBook/'+ ${book.bookId}}" th:text="${book.title}"></a></td>
+                <td th:if="${book.author != null }" th:text="${book.author.name}"></td>
+                <td th:unless="${book.author != null}"></td>
+                <td th:if="${book.category != null}" th:text="${book.category.name}"></td>
+                <td th:unless="${book.category != null}"></td>
+                <td th:if="${book.publisher != null}" th:text="${book.publisher.name}" ></td> 
+                <td th:unless="${book.publisher != null}"></td>               
                 <td th:text="${book.copiesAvailable}"></td>
                 <td th:text="${book.copiesTotal}"></td>
                 
@@ -84,6 +88,7 @@
 	    <span id="pageNumbers"></span>
 	    <button id="nextBtn" onclick="nextPage()">Next</button>
   	</div>
+  	<script th:src="@{/js/myjavascript.js}"></script>
 </div>
 
    
